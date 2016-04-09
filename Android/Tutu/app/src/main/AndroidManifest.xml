@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MapActivity"></activity>
+        <activity android:name=".PhotoWallActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
