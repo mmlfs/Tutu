@@ -18,6 +18,8 @@ import android.widget.ImageView;
 
 import com.hackpku.tutu.mylib.HorizontalScrollViewAdapter;
 import com.hackpku.tutu.mylib.MyHorizontalScrollView;
+import com.hackpku.tutu.mylib.NetWorkMethods;
+import com.hackpku.tutu.mylib.Picture;
 
 @TargetApi(15)
 public class ScrollPhotoActivity extends Activity {
@@ -27,7 +29,7 @@ public class ScrollPhotoActivity extends Activity {
     private MyHorizontalScrollView mHorizontalScrollView;
     private HorizontalScrollViewAdapter mAdapter;
     private ImageView mImg;
-    private List<String> mDatas;
+    private List<Picture> mDatas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,13 +39,17 @@ public class ScrollPhotoActivity extends Activity {
         setContentView(R.layout.scroll_layout);
 
         Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        mDatas = NetWorkMethods.getUrls(bundle.getDouble("longitude"), bundle.getDouble("latitude"));
 
         mImg = (ImageView) findViewById(R.id.id_content);
         mImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Picture info = (Picture) view.getTag();
                 Bundle data = new Bundle();
-                data.putString("url", (String) view.getTag());
+                data.putString("url", info.url);
+                data.putString("content", info.comment);
                 Intent intent = new Intent(ScrollPhotoActivity.this, CommentActivity.class);
                 intent.putExtras(data);
                 startActivity(intent);
@@ -60,7 +66,7 @@ public class ScrollPhotoActivity extends Activity {
                     public void onCurrentImgChanged(int position,
                                                     View viewIndicator)
                     {
-                        HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
+                        HorizontalScrollViewAdapter.setImageView(mDatas.get(position).url, mImg);
                         mImg.setTag(mDatas.get(position));
                         viewIndicator.setBackgroundColor(Color
                                 .parseColor("#AA024DA4"));
@@ -73,7 +79,7 @@ public class ScrollPhotoActivity extends Activity {
             @Override
             public void onClick(View view, int position)
             {
-                HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
+                HorizontalScrollViewAdapter.setImageView(mDatas.get(position).url, mImg);
                 mImg.setTag(mDatas.get(position));
                 view.setBackgroundColor(Color.parseColor("#AA024DA4"));
             }

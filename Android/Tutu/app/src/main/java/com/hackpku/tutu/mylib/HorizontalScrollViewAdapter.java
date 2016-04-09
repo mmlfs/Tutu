@@ -32,9 +32,9 @@ public class HorizontalScrollViewAdapter
 
 	private Context mContext;
 	private LayoutInflater mInflater;
-	private List<String> mDatas;
+	private List<Picture> mDatas;
 
-	public HorizontalScrollViewAdapter(Context context, List<String> mDatas)
+	public HorizontalScrollViewAdapter(Context context, List<Picture> mDatas)
 	{
 		this.mContext = context;
 		mInflater = LayoutInflater.from(context);
@@ -75,8 +75,8 @@ public class HorizontalScrollViewAdapter
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		setImageView(mDatas.get(position), viewHolder.mImg);
-		viewHolder.mText.setText("some info ");
+		setImageView(mDatas.get(position).url, viewHolder.mImg);
+		viewHolder.mText.setText("");
 
 		return convertView;
 	}

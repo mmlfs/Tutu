@@ -56,13 +56,8 @@ public class NetWorkMethods {
             JSONObject jsonObject = null, child = null;
             String imageUrl = null;
             Bitmap bitmap = null;
-            String comment = null;
             for (int i = 0; i < jsonArray.length(); ++i) {
                 jsonObject = (JSONObject) jsonArray.get(i);
-                if (jsonObject.getJSONArray("related_img").length() > 0) {
-                    child = (JSONObject) ((jsonObject.getJSONArray("related_img").get(0)));
-                    comment = child.getString("content");
-                }
                 imageUrl = jsonObject.getString("path");
                 if(!imageUrl.startsWith("http"))
                     imageUrl = "http://121.201.58.48/download/" + imageUrl;
@@ -82,8 +77,45 @@ public class NetWorkMethods {
                         HorizontalScrollViewAdapter.addBitmapToMemoryCache(imageUrl, bitmap);
                     }
                 }
-                Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap, comment);
+                Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap);
                 ans.add(tuphoto);
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
+
+    public static ArrayList<Picture> getUrls(double longitude, double latitude) {
+        JSONObject result = getPictures(longitude, latitude);
+        ArrayList<Picture> ans = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = result.getJSONArray("data");
+            JSONObject jsonObject = null, child = null;
+            String imageUrl = null;
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                jsonObject = (JSONObject) jsonArray.get(i);
+
+                imageUrl = jsonObject.getString("path");
+                if(!imageUrl.startsWith("http"))
+                    imageUrl = "http://121.201.58.48/download/" + imageUrl;
+                Picture cur = new Picture();
+                cur.url = imageUrl;
+                cur.age = jsonObject.getDouble("age");
+                cur.attractive = jsonObject.getDouble("attractive");
+                cur.male = jsonObject.getInt("male");
+                cur.female = jsonObject.getInt("female");
+                cur.likes_count = jsonObject.getInt("likes_count");
+                if (jsonObject.getJSONArray("related_img").length() > 0) {
+                    child = (JSONObject) ((jsonObject.getJSONArray("related_img").get(0)));
+                    cur.comment = child.getString("content");
+                }
+                else
+                    cur.comment = "嘿嘿, hacker, 你们好呀!";
+                ans.add(cur);
             }
 
         }

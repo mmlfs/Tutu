@@ -40,7 +40,7 @@ public class CommentActivity extends Activity{
 
         mdata = new ArrayList<String>();
         mdata.add(bundle.getString("url"));
-        mdata.add("沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊");
+        mdata.add(bundle.getString("content"));
         adapter = new NewsAdapter(this, 0, mdata);
         listView.setAdapter(adapter);
     }
