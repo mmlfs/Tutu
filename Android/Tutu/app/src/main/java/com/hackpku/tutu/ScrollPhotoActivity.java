@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -14,15 +17,29 @@ import android.widget.ImageView;
 import com.hackpku.tutu.mylib.HorizontalScrollViewAdapter;
 import com.hackpku.tutu.mylib.MyHorizontalScrollView;
 
+@TargetApi(15)
 public class ScrollPhotoActivity extends Activity {
+
+    public static LruCache<String, Bitmap> mMemoryCache;
 
     private MyHorizontalScrollView mHorizontalScrollView;
     private HorizontalScrollViewAdapter mAdapter;
     private ImageView mImg;
-    private List<Integer> mDatas = new ArrayList<Integer>(Arrays.asList(
-            R.mipmap.a, R.mipmap.b, R.mipmap.c, R.mipmap.d,
-            R.mipmap.e, R.mipmap.f, R.mipmap.g, R.mipmap.h,
-            R.mipmap.l));
+    private List<String> mDatas = new ArrayList<String>(Arrays.asList(
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://imgsrc.baidu.com/forum/w%3D580/sign=409601260a7b02080cc93fe952d8f25f/08081501213fb80e557c485436d12f2ebb3894e0.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
+            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
+            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +47,17 @@ public class ScrollPhotoActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.scroll_layout);
+
+        // 获取应用程序最大可用内存
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int cacheSize = maxMemory / 8;
+        // 设置图片缓存大小为程序最大可用内存的1/8
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount();
+            }
+        };
 
         mImg = (ImageView) findViewById(R.id.id_content);
 
@@ -43,7 +71,7 @@ public class ScrollPhotoActivity extends Activity {
                     public void onCurrentImgChanged(int position,
                                                     View viewIndicator)
                     {
-                        mImg.setImageResource(mDatas.get(position));
+                        HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
                         viewIndicator.setBackgroundColor(Color
                                 .parseColor("#AA024DA4"));
                     }
@@ -55,12 +83,13 @@ public class ScrollPhotoActivity extends Activity {
             @Override
             public void onClick(View view, int position)
             {
-                mImg.setImageResource(mDatas.get(position));
+                HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
                 view.setBackgroundColor(Color.parseColor("#AA024DA4"));
             }
         });
         //设置适配器
         mHorizontalScrollView.initDatas(mAdapter);
+
     }
 
 }

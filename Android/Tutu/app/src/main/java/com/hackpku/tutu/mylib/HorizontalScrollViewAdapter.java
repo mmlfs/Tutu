@@ -1,8 +1,15 @@
 package com.hackpku.tutu.mylib;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +18,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackpku.tutu.R;
+import com.hackpku.tutu.ScrollPhotoActivity;
 
+@TargetApi(15)
 public class HorizontalScrollViewAdapter
 {
+	/**
+	 * 图片缓存技术的核心类，用于缓存所有下载好的图片，在程序内存达到设定值时会将最少最近使用的图片移除掉。
+	 */
 
 	private Context mContext;
 	private LayoutInflater mInflater;
-	private List<Integer> mDatas;
+	private List<String> mDatas;
 
-	public HorizontalScrollViewAdapter(Context context, List<Integer> mDatas)
+	public HorizontalScrollViewAdapter(Context context, List<String> mDatas)
 	{
 		this.mContext = context;
 		mInflater = LayoutInflater.from(context);
@@ -59,7 +71,8 @@ public class HorizontalScrollViewAdapter
 		{
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		viewHolder.mImg.setImageResource(mDatas.get(position));
+
+		setImageView(mDatas.get(position), viewHolder.mImg);
 		viewHolder.mText.setText("some info ");
 
 		return convertView;
@@ -71,4 +84,60 @@ public class HorizontalScrollViewAdapter
 		TextView mText;
 	}
 
+	/**
+	 * 给ImageView设置图片。首先从LruCache中取出图片的缓存，设置到ImageView上。如果LruCache中没有该图片的缓存，
+	 * 就给ImageView设置一张默认图片。
+	 *
+	 * @param imageUrl
+	 *            图片的URL地址，用于作为LruCache的键。
+	 * @param imageView
+	 *            用于显示图片的控件。
+	 */
+	public static void setImageView(String imageUrl, ImageView imageView) {
+		Bitmap bitmap = getBitmapFromMemoryCache(imageUrl);
+		Log.i("Position", imageUrl);
+		if (bitmap != null) {
+			imageView.setImageBitmap(bitmap);
+		} else {
+			try {
+				URL url = new URL(imageUrl);
+				InputStream is = url.openStream();
+				bitmap = BitmapFactory.decodeStream(is);
+				is.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (bitmap != null) {
+				addBitmapToMemoryCache(imageUrl, bitmap);
+				imageView.setImageBitmap(bitmap);
+			}
+			else
+				imageView.setImageResource(R.mipmap.empty_photo);
+		}
+	}
+
+	/**
+	 * 将一张图片存储到LruCache中。
+	 *
+	 * @param key
+	 *            LruCache的键，这里传入图片的URL地址。
+	 * @param bitmap
+	 *            LruCache的键，这里传入从网络上下载的Bitmap对象。
+	 */
+	public static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+		if (getBitmapFromMemoryCache(key) == null) {
+			ScrollPhotoActivity.mMemoryCache.put(key, bitmap);
+		}
+	}
+
+	/**
+	 * 从LruCache中获取一张图片，如果不存在就返回null。
+	 *
+	 * @param key
+	 *            LruCache的键，这里传入图片的URL地址。
+	 * @return 对应传入键的Bitmap对象，或者null。
+	 */
+	public static Bitmap getBitmapFromMemoryCache(String key) {
+		return ScrollPhotoActivity.mMemoryCache.get(key);
+	}
 }
