@@ -123,15 +123,4 @@ public class GetPostUtil {
 
         return ans;
     }
-
-    public static JSONObject sendData(Bitmap bitmap) {
-        Bitmap bmpCompressed = Bitmap.createScaledBitmap(bitmap, 640, 480, true);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        // CompressFormat set up to JPG, you can change to PNG or whatever you want;
-        bmpCompressed.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        byte[] data = bos.toByteArray();
-        JSONObject ans = null;
-        HttpPost post = null;
-        return ans;
-    }
 }

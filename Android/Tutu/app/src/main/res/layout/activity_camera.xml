@@ -17,4 +17,17 @@
         android:layout_marginBottom="30dp"
         android:background="@mipmap/ic_action_upload"/>
 
+    <EditText android:id="@+id/commentEt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_above="@id/uploadBtn"
+        android:hint="请输入评论后上传照片"/>
+
+    <TextView android:id="@+id/locationTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/commentEt"
+        android:text="经纬度："/>
+
 </RelativeLayout>
