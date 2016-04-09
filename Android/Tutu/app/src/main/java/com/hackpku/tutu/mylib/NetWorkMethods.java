@@ -56,11 +56,14 @@ public class NetWorkMethods {
         ArrayList<Tuphoto> ans = new ArrayList<>();
         try {
             JSONArray jsonArray = result.getJSONArray("data");
-            JSONObject jsonObject = null;
+            JSONObject jsonObject = null, child = null;
             String imageUrl = null;
             Bitmap bitmap = null;
+            String comment = null;
             for (int i = 0; i < jsonArray.length(); ++i) {
                 jsonObject = (JSONObject) jsonArray.get(i);
+                child = (JSONObject) ((jsonObject.getJSONArray("related_img").get(0)));
+                comment = child.getString("content");
                 imageUrl = jsonObject.getString("path");
                 if(!imageUrl.startsWith("http"))
                     imageUrl = "http://121.201.58.48/download/" + imageUrl;
@@ -80,7 +83,7 @@ public class NetWorkMethods {
                         HorizontalScrollViewAdapter.addBitmapToMemoryCache(imageUrl, bitmap);
                     }
                 }
-                Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap);
+                Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap, comment);
                 ans.add(tuphoto);
             }
 
