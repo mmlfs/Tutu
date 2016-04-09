@@ -14,14 +14,14 @@ import java.io.File;
 public class NetWorkMethods {
 
     public static JSONObject uploadPicture(String filePath, double longitude, double latitude) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         // CompressFormat set up to JPG, you can change to PNG or whatever you want;
         //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        byte[] data = bos.toByteArray();
 
-        JSONObject result = GetPostUtil.sendPost("http://121.201.58.48/api/img/upload_file/", "Filedata=" + data);
-        Log.i("DUYAN", result.toString());
+        //JSONObject result = GetPostUtil.sendPost("http://121.201.58.48/api/img/upload_file/", "Filedata=" + data);
+        //Log.i("DUYAN", result.toString());
+        GetPostUtil.uploadFile(filePath, "http://121.201.58.48/api/img/upload_file/");
         JSONObject ans = null;
+        /*
         try {
             String path = "http://121.201.58.48/Tutu/Tutu/img/upload/" + result.getString("data");
             String params = "longitude=" + String.valueOf(longitude) + "&";
@@ -32,7 +32,7 @@ public class NetWorkMethods {
         }
         catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         return ans;
     }
 
