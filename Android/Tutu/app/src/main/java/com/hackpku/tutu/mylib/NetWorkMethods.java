@@ -4,13 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.hackpku.tutu.R;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,6 +48,7 @@ public class NetWorkMethods {
 
     public static ArrayList<Tuphoto> getBitmaps(double longitude, double latitude) {
         JSONObject result = getPictures(longitude, latitude);
+
         Log.i("DUYAN", "jingwei" + result.toString());
         ArrayList<Tuphoto> ans = new ArrayList<>();
         try {
