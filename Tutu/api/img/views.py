@@ -134,6 +134,18 @@ class GetImageList(APIView):
 		return Response({"status":0, "info":"", "data":serializer.data})
 
 
+
+class GetAroundImageList(APIView):
+	def get(self, request, format=None):
+		longitude = (float)(request.query_params["longitude"])
+		latitude = (float)(request.query_params["latitude"])
+
+		img_list = Image.objects.filter(longitude__gte=longitude-0.003,longitude__lte=longitude+0.003,latitude__gte=latitude-0.003,latitude__lte=latitude+0.003)
+		serializer = ImageSerializer(img_list,many=True)
+		return Response({"status":0, "info":"", "data":serializer.data})
+
+
+
 class AddComment(APIView):
 	def get(self, request, pk):
 		content = request.query_params["content"]
