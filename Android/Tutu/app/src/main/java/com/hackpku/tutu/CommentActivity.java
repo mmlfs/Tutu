@@ -40,7 +40,11 @@ public class CommentActivity extends Activity{
 
         mdata = new ArrayList<String>();
         mdata.add(bundle.getString("url"));
-        mdata.add(bundle.getString("content"));
+        String content = "";
+        content += "年龄:" + bundle.getString("age") + "\t\t颜值:" + bundle.getString("attractive") + "\n";
+        content += "女生数:" + bundle.getString("female") + "\t\t男生数:" + bundle.getString("male") + "\n\n";
+        content += bundle.getString("content");
+        mdata.add(content);
         adapter = new NewsAdapter(this, 0, mdata);
         listView.setAdapter(adapter);
     }

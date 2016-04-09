@@ -49,7 +49,7 @@ public class NetWorkMethods {
     public static ArrayList<Tuphoto> getBitmaps(double longitude, double latitude) {
         JSONObject result = getPictures(longitude, latitude);
 
-        Log.i("DUYAN", "jingwei" + result.toString());
+        //Log.i("DUYAN", "jingwei" + result.toString());
         ArrayList<Tuphoto> ans = new ArrayList<>();
         try {
             JSONArray jsonArray = result.getJSONArray("data");
@@ -68,7 +68,6 @@ public class NetWorkMethods {
                         URL url = new URL(imageUrl);
                         InputStream is = url.openStream();
                         bitmap = BitmapFactory.decodeStream(is);
-                        Log.i("DUYAN", "jingweieererer" + bitmap.toString());
                         is.close();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -88,11 +87,17 @@ public class NetWorkMethods {
         return ans;
     }
 
-    public static ArrayList<Picture> getUrls(double longitude, double latitude) {
+    public static ArrayList<Picture> getUrls(double longitude, double latitude, Position position) {
         JSONObject result = getPictures(longitude, latitude);
         ArrayList<Picture> ans = new ArrayList<>();
 
         try {
+            position.tag = result.getJSONObject("total").getString("tag");
+            position.age = result.getJSONObject("total").getDouble("age");
+            position.attractive = result.getJSONObject("total").getDouble("attractive");
+            position.attitude = result.getJSONObject("total").getInt("attitude");
+            position.male = result.getJSONObject("total").getInt("male");
+            position.female = result.getJSONObject("total").getInt("female");
             JSONArray jsonArray = result.getJSONArray("data");
             JSONObject jsonObject = null, child = null;
             String imageUrl = null;
