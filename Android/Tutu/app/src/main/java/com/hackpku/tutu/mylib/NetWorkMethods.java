@@ -46,11 +46,13 @@ public class NetWorkMethods {
 
     public static JSONObject getPictures(double longitude, double latitude) {
         String params = "longitude=" + String.valueOf(longitude) + "&" + "latitude=" + String.valueOf(latitude);
+        Log.i("DUYAN", "jingwei" + params);
         return GetPostUtil.sendGet("http://121.201.58.48/api/img/list_around_images/", params);
     }
 
     public static ArrayList<Tuphoto> getBitmaps(double longitude, double latitude) {
         JSONObject result = getPictures(longitude, latitude);
+        Log.i("DUYAN", "jingwei" + result.toString());
         ArrayList<Tuphoto> ans = new ArrayList<>();
         try {
             JSONArray jsonArray = result.getJSONArray("data");
@@ -59,7 +61,9 @@ public class NetWorkMethods {
             Bitmap bitmap = null;
             for (int i = 0; i < jsonArray.length(); ++i) {
                 jsonObject = (JSONObject) jsonArray.get(i);
-                imageUrl = "http://121.201.58.48/download/" + jsonObject.getString("path");
+                imageUrl = jsonObject.getString("path");
+                if(!imageUrl.startsWith("http"))
+                    imageUrl = "http://121.201.58.48/download/" + imageUrl;
                 bitmap = HorizontalScrollViewAdapter.getBitmapFromMemoryCache(imageUrl);
 
                 if (bitmap == null) {
@@ -67,6 +71,7 @@ public class NetWorkMethods {
                         URL url = new URL(imageUrl);
                         InputStream is = url.openStream();
                         bitmap = BitmapFactory.decodeStream(is);
+                        Log.i("DUYAN", "jingweieererer" + bitmap.toString());
                         is.close();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -76,6 +81,7 @@ public class NetWorkMethods {
                     }
                 }
                 Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap);
+                ans.add(tuphoto);
             }
 
         }

@@ -50,17 +50,6 @@ public class ScrollPhotoActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.scroll_layout);
 
-        // 获取应用程序最大可用内存
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheSize = maxMemory / 8;
-        // 设置图片缓存大小为程序最大可用内存的1/8
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount();
-            }
-        };
-
         mImg = (ImageView) findViewById(R.id.id_content);
         mImg.setOnClickListener(new View.OnClickListener() {
             @Override
