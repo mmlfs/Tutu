@@ -129,77 +129,10 @@ public class GetPostUtil {
         return ans;
     }
 
-    public static JSONObject uploadPicture(Bitmap bitmap)
+    /* 模拟表单上传文件的方法 */
+    public static JSONObject uploadFile(String srcPath, String uploadUrl)
     {
         String result = null;
-        OutputStream out = null;
-        InputStream in = null;
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        // CompressFormat set up to JPG, you can change to PNG or whatever you want;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        byte[] data = bos.toByteArray();
-
-        try {
-            URL url = new URL("http://121.201.58.48/api/img/upload_file/");
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            //上传图片的一些参数设置
-            conn.setRequestProperty("Accept", "image/gif,   image/x-xbitmap,   image/jpeg,   image/pjpeg,   application/vnd.ms-excel,   application/vnd.ms-powerpoint,   application/msword,   application/x-shockwave-flash,   application/x-quickviewplus,   */*");
-            conn.setRequestProperty("Accept-Language", "zh-cn");
-            conn.setRequestProperty("Content-type", "multipart/form-data;   boundary=---------------------------7d318fd100112");
-            conn.setRequestProperty("Accept-Encoding", "gzip,   deflate");
-            conn.setRequestProperty("User-Agent", "Mozilla/4.0   (compatible;   MSIE   6.0;   Windows   NT   5.1)");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setUseCaches(true);
-            out = conn.getOutputStream();
-
-            //写入图片流
-            out.write(data);
-            out.flush();
-
-            //读取响应数据
-            int code = conn.getResponseCode();
-            String line;
-            in = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            result = reader.readLine();
-            while ((line = reader.readLine()) != null)
-                result += "\n" + line;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (out != null) {
-                out.close();
-            }
-            if (in != null) {
-                in.close();
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        JSONObject ans = null;
-        try {
-            ans = new JSONObject(result);
-        }
-        catch (Exception e) {
-            System.out.println("JSON转化错误!");
-            e.printStackTrace();
-        }
-        return ans;
-    }
-
-    /* 上传文件至Server的方法 */
-    public static void uploadFile(String srcPath, String actionUrl)
-    {
-
-        String uploadUrl = actionUrl;
         String end = "\r\n";
         String twoHyphens = "--";
         String boundary = "******";
@@ -213,12 +146,11 @@ public class GetPostUtil {
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
             httpURLConnection.setRequestProperty("Charset", "UTF-8");
-            httpURLConnection.setRequestProperty("Content-Type",
-                    "multipart/form-data;boundary=" + boundary);
+            httpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
             DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
             dos.writeBytes(twoHyphens + boundary + end);
-            dos.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\""
+            dos.writeBytes("Content-Disposition: form-data; name=\"Filedata\"; filename=\""
                     + srcPath.substring(srcPath.lastIndexOf("/") + 1)
                     + "\"" + end);
             dos.writeBytes(end);
@@ -226,10 +158,8 @@ public class GetPostUtil {
             FileInputStream fis = new FileInputStream(srcPath);
             byte[] buffer = new byte[8192000]; // 8k
             int count = 0;
-            while ((count = fis.read(buffer)) != -1)
-            {
+            while ((count = fis.read(buffer)) != -1) {
                 dos.write(buffer, 0, count);
-
             }
             fis.close();
             System.out.println("file send to server............");
@@ -241,7 +171,11 @@ public class GetPostUtil {
             InputStream is = httpURLConnection.getInputStream();
             InputStreamReader isr = new InputStreamReader(is, "utf-8");
             BufferedReader br = new BufferedReader(isr);
-            String result = br.readLine();
+            String line;
+            result = br.readLine();
+            while ((line = br.readLine()) != null) {
+                result += "\n" + line;
+            }
             System.out.println(result);
 
             dos.close();
@@ -250,5 +184,14 @@ public class GetPostUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        JSONObject ans = null;
+        try {
+            ans = new JSONObject(result);
+        }
+        catch (Exception e) {
+            System.out.println("JSON转化错误!");
+            e.printStackTrace();
+        }
+        return ans;
     }
 }

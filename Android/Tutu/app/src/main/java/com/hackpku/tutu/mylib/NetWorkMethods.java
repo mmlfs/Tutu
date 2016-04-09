@@ -14,25 +14,22 @@ import java.io.File;
 public class NetWorkMethods {
 
     public static JSONObject uploadPicture(String filePath, double longitude, double latitude) {
-        // CompressFormat set up to JPG, you can change to PNG or whatever you want;
-        //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
 
-        //JSONObject result = GetPostUtil.sendPost("http://121.201.58.48/api/img/upload_file/", "Filedata=" + data);
-        //Log.i("DUYAN", result.toString());
-        GetPostUtil.uploadFile(filePath, "http://121.201.58.48/api/img/upload_file/");
         JSONObject ans = null;
-        /*
+        JSONObject result = GetPostUtil.uploadFile(filePath, "http://121.201.58.48/api/img/upload_file/");
+        Log.i("DUYAN", "asdas" + result.toString());
+
         try {
-            String path = "http://121.201.58.48/Tutu/Tutu/img/upload/" + result.getString("data");
+            String path = "http://121.201.58.48/download/" + result.getString("data");
             String params = "longitude=" + String.valueOf(longitude) + "&";
             params += "latitude=" + String.valueOf(latitude) + "&";
             params += "path=" + path;
             ans = GetPostUtil.sendGet("http://121.201.58.48/api/img/upload/", params);
-            Log.i("DUYAN", "asdas" + result.toString());
+            Log.i("DUYAN", "asdas" + ans.toString());
         }
         catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
         return ans;
     }
 
