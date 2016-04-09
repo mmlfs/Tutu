@@ -8,6 +8,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
     url(r"^test/$", views.Test.as_view(), name="test"),
     url(r"^upload/$", views.UploadImage.as_view(), name="upload_image"),
+    url(r"^upload_file/$", views.UploadFiles.as_view(), name="upload_file"),
     url(r"^list_images/$", views.GetImageList.as_view(), name="get_imageslist"),
     url(r"^list_around_images/$", views.GetAroundImageList.as_view(), name="list_around_images"),
     url(r"^(?P<pk>\d+)/add_comment/$", views.AddComment.as_view(), name="add_comment"),
