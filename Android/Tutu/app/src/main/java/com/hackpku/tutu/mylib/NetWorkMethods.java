@@ -1,12 +1,19 @@
 package com.hackpku.tutu.mylib;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.hackpku.tutu.R;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by duyanpku on 16/4/9.
@@ -36,5 +43,41 @@ public class NetWorkMethods {
     public static JSONObject getPictures(double longitude, double latitude) {
         String params = "longitude=" + String.valueOf(longitude) + "&" + "latitude=" + String.valueOf(latitude);
         return GetPostUtil.sendGet("http://121.201.58.48/api/img/list_around_images/", params);
+    }
+
+    public static ArrayList<Tuphoto> getBitmaps(double longitude, double latitude) {
+        JSONObject result = getPictures(longitude, latitude);
+        ArrayList<Tuphoto> ans = new ArrayList<>();
+        try {
+            JSONArray jsonArray = result.getJSONArray("data");
+            JSONObject jsonObject = null;
+            String imageUrl = null;
+            Bitmap bitmap = null;
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                jsonObject = (JSONObject) jsonArray.get(i);
+                imageUrl = "http://121.201.58.48/download/" + jsonObject.getString("path");
+                bitmap = HorizontalScrollViewAdapter.getBitmapFromMemoryCache(imageUrl);
+
+                if (bitmap == null) {
+                    try {
+                        URL url = new URL(imageUrl);
+                        InputStream is = url.openStream();
+                        bitmap = BitmapFactory.decodeStream(is);
+                        is.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (bitmap != null) {
+                        HorizontalScrollViewAdapter.addBitmapToMemoryCache(imageUrl, bitmap);
+                    }
+                }
+                Tuphoto tuphoto = new Tuphoto(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"), bitmap);
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 }
