@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMap.OnCameraChangeListener;
@@ -89,8 +88,8 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         for(Tuphoto tp:vt) aMap.addMarker(tp.getMarker());
 
         String info = "na:"+la1+"-"+lo1+"\nsw:"+la2+"-"+lo2+"\nphoto num:"+vt.size();
-        Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
-        toast.show();
+        //Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
+        //toast.show();
 
     }
 
@@ -155,8 +154,14 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
     @Override
     public void onMapLongClick(LatLng latLng) {
         CameraPosition cp=aMap.getCameraPosition();
+        Bundle data = new Bundle();
+        data.putDouble("latitude", cp.target.latitude);
+        data.putDouble("longitude", cp.target.longitude);
+        Intent intent = new Intent(this, ScrollPhotoActivity.class);
+        intent.putExtras(data);
+        startActivity(intent);
         String info="维度："+latLng.latitude+"\n精度"+latLng.longitude+"\n缩放:"+cp.zoom+"\n中心维度："+cp.target.latitude+"\n中心精度："+cp.target.longitude;
-        Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
-        toast.show();
+        //Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
+        //toast.show();
     }
 }
