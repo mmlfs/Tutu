@@ -43,15 +43,5 @@ public class CommentActivity extends Activity{
         mdata.add("沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊沙雕啊");
         adapter = new NewsAdapter(this, 0, mdata);
         listView.setAdapter(adapter);
-
-        JSONObject result = GetPostUtil.sendGet("http://121.201.58.48/api/img/list_around_images/", "longitude=1.1&latitude=2.2");
-        try {
-            Log.i("DUYAN", result.getJSONArray("data").toString());
-            Toast toast = Toast.makeText(getApplicationContext(), result.getJSONArray("data").toString(), Toast.LENGTH_LONG);
-            toast.show();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

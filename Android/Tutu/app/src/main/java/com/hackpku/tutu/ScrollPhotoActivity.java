@@ -27,21 +27,7 @@ public class ScrollPhotoActivity extends Activity {
     private MyHorizontalScrollView mHorizontalScrollView;
     private HorizontalScrollViewAdapter mAdapter;
     private ImageView mImg;
-    private List<String> mDatas = new ArrayList<String>(Arrays.asList(
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://imgsrc.baidu.com/forum/w%3D580/sign=409601260a7b02080cc93fe952d8f25f/08081501213fb80e557c485436d12f2ebb3894e0.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg",
-            "http://img4.duitang.com/uploads/item/201510/17/20151017000316_diBQY.jpeg",
-            "http://g.hiphotos.baidu.com/zhidao/pic/item/0d338744ebf81a4c5fa4e3d9d32a6059252da60f.jpg"));
+    private List<String> mDatas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,6 +35,8 @@ public class ScrollPhotoActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.scroll_layout);
+
+        Intent intent = getIntent();
 
         mImg = (ImageView) findViewById(R.id.id_content);
         mImg.setOnClickListener(new View.OnClickListener() {
