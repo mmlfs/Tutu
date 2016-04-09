@@ -114,31 +114,31 @@ class UploadImage(APIView):
 		# user = request.user
 		user = User.objects.get(username='test1')
 
-		face_info=getFaceInfo(path)
-		faces=face_info['faces']
+		#face_info=getFaceInfo(path)
+		#faces=face_info['faces']
 		age=0
 		male=0
 		female=0
 		attractive=0
-		for face in faces:
-			attributes=face['attributes']
-			age+=attributes['age']
-			gender=int(attributes['gender'])
-			if gender<50:
-				female=female+1
-			else:
-				male=male+1
-			attractive+=attributes['attractive']
-		faces_num=len(faces)
-		if faces_num>0:
-			age=float(age)/faces_num
-			gender=float(gender)/faces_num
-			attractive=float(attractive)/faces_num
-		else:
-			age=-1
-			male=-1
-			female=-1
-			attractive=-1
+#		for face in faces:
+#			attributes=face['attributes']
+#			age+=attributes['age']
+#			gender=int(attributes['gender'])
+#			if gender<50:
+#				female=female+1
+#			else:
+#				male=male+1
+#			attractive+=attributes['attractive']
+#		faces_num=len(faces)
+#		if faces_num>0:
+#			age=float(age)/faces_num
+#			gender=float(gender)/faces_num
+#			attractive=float(attractive)/faces_num
+#		else:
+#			age=-1
+#			male=-1
+#			female=-1
+#			attractive=-1
 		print age
 		print male
 		print female
@@ -156,7 +156,8 @@ class UploadImage(APIView):
 		img.attractive=attractive
 		img.save()
 		serializer = ImageSerializer(img)
-		return Response({"status":0, "info":"", "data":face_info['faces']})
+		#return Response({"status":0, "info":"", "data":face_info['faces']})
+		return Response({"status":0, "info":""})
 
 
 class GetImageList(APIView):
