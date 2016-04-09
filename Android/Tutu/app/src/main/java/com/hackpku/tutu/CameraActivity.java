@@ -20,12 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hackpku.tutu.mylib.NetWorkMethods;
+
 public class CameraActivity extends Activity {
 
     ImageView photoIv;
     Button uploadBtn;
     EditText commentEt;
     TextView locationTv;
+    Bitmap photo;
     double latitude = 116.30507720+Math.random()/1000;
     double longitude = 39.987662381+Math.random()/1000;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -40,6 +43,7 @@ public class CameraActivity extends Activity {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NetWorkMethods.uploadPicture(photo,longitude,latitude);
                 finish();
             }
         });
@@ -121,8 +125,8 @@ public class CameraActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            photoIv.setImageBitmap(imageBitmap);
+            photo = (Bitmap) extras.get("data");
+            photoIv.setImageBitmap(photo);
             getLocation();
         }
     }
