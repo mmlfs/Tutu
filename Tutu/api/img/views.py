@@ -111,7 +111,8 @@ class UploadImage(APIView):
 		longitude = (float)(request.query_params["longitude"])
 		latitude = (float)(request.query_params["latitude"])
 		path = request.query_params["path"]
-		user = request.user
+		# user = request.user
+		user = User.objects.get(username='test1')
 
 		face_info=getFaceInfo(path)
 		faces=face_info['faces']
@@ -220,7 +221,8 @@ class AddComment(APIView):
 		# print attitude_list[0]
 		attitude = float(attitude_list[0])-float(attitude_list[1])
 		img = Image.objects.get(pk=pk)
-		user = request.user
+		# user = request.user
+		user = User.objects.get(username='test1')
 
 		comment = Comment()
 		comment.created = timezone.now()
@@ -244,31 +246,35 @@ class GetCommentPerImg(APIView):
 
 class ImgLike(APIView):
 	def get(self, request, pk):
+		user = User.objects.get(username='test1')
 		img = Image.objects.get(pk=pk)
 		if request.user.liked_image.filter(id=img.id).exists():
 			return Response({"status":1, "info":"已经赞过啦", "data":""})
-		img.likes.add(request.user)
+		img.likes.add(user)
 		return Response({"status":0, "info":"success", "data":""})	
 	
 class ImgUnlike(APIView):
 	def get(self, request, pk):
+		user = User.objects.get(username='test1')
 		img = Image.objects.get(pk=pk)
-		img.likes.remove(request.user)
+		img.likes.remove(user)
 		return Response({"status":0, "info":"success", "data":""})	
 
 
 class CommentLike(APIView):
 	def get(self, request, pk):
+		user = User.objects.get(username='test1')
 		comment = Comment.objects.get(pk=pk)
 		if request.user.liked_comment.filter(id=comment.id).exists():
 			return Response({"status":1, "info":"已经赞过啦", "data":""})
-		comment.likes.add(request.user)
+		comment.likes.add(user)
 		return Response({"status":0, "info":"success", "data":""})	
 	
 class CommentUnlike(APIView):
 	def get(self, request, pk):
+		user = User.objects.get(username='test1')
 		comment = Comment.objects.get(pk=pk)
-		comment.likes.remove(request.user)
+		comment.likes.remove(user)
 		return Response({"status":0, "info":"success", "data":""})	
 
 
