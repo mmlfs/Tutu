@@ -105,6 +105,12 @@ class UploadFiles(APIView):
 				ret="1"                      
 		return Response({"status":ret, "info":"", "data":new_name})
 
+class DeleteImage(APIView):
+	def get(self, request, format=None):
+		path = request.query_params["path"]
+		images = Image.objects.filter(path=path)
+		for img in images:
+			img.delete()
 
 class UploadImage(APIView):
 	def get(self, request, format=None):
