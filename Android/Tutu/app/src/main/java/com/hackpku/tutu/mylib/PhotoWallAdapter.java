@@ -23,6 +23,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hackpku.tutu.R;
 
@@ -33,7 +34,6 @@ import com.hackpku.tutu.R;
  */
 @TargetApi(15)
 public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollListener {
-
     /**
      * 记录所有正在下载或等待下载的任务。
      */
@@ -97,6 +97,13 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         Log.i("photo", url);
         photo.setTag(url);
         setImageView(url, photo);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast=Toast.makeText(getContext(), "你好啊", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
         return view;
     }
 

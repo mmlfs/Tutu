@@ -5,8 +5,13 @@ package com.hackpku.tutu;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 import com.hackpku.tutu.mylib.Images;
 import com.hackpku.tutu.mylib.PhotoWallAdapter;
@@ -16,7 +21,7 @@ import com.hackpku.tutu.mylib.PhotoWallAdapter;
  *
  * @author guolin
  */
-public class PhotoWallActivity extends Activity {
+public class PhotoWallActivity extends Activity implements OnClickListener {
 
     /**
      * 用于展示照片墙的GridView
@@ -44,5 +49,9 @@ public class PhotoWallActivity extends Activity {
         adapter.cancelAllTasks();
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }
 
