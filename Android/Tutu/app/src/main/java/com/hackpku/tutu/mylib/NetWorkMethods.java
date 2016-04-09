@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class NetWorkMethods {
 
-    public static JSONObject uploadPicture(String filePath, double longitude, double latitude) {
+    public static JSONObject uploadPicture(String filePath, double longitude, double latitude, String comment) {
 
         JSONObject ans = null;
         JSONObject result = GetPostUtil.uploadFile(filePath, "http://121.201.58.48/api/img/upload_file/");
@@ -32,7 +32,11 @@ public class NetWorkMethods {
             params += "latitude=" + String.valueOf(latitude) + "&";
             params += "path=" + path;
             ans = GetPostUtil.sendGet("http://121.201.58.48/api/img/upload/", params);
+
             Log.i("DUYAN", "asdas" + ans.toString());
+            path = "http://121.201.58.48/Tutu/Tutu/img/" + String.valueOf(ans.getInt("info")) + "/add_comment/";
+            params = "content=" + comment;
+            GetPostUtil.sendGet(path, params);
         }
         catch (Exception e) {
             e.printStackTrace();
