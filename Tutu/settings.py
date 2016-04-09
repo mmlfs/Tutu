@@ -47,6 +47,7 @@ INSTALLED_APPS = (
 
     'Tutu.api.account',
     'Tutu.api.img',
+    'Tutu.web',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -110,8 +111,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 MEDIA_ROOT = os.path.join(PACKAGE_ROOT, "img")
+
+# TEMPLATE_DIRS = [
+#     os.path.join(PROJECT_ROOT, "templates"),
+# ]
+# TEMPLATES = [
+# {
+#     'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [
+#             '/templates',
+#             '/Tutu/templates',
+#         ],
+#     },
+# ]
+
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_PERMISSION_CLASSES': (

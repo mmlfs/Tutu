@@ -31,22 +31,13 @@
 
     function picmark(map, picname, x, y){
       var div=picdiv(picname);
-      var position=new AMap.LngLat(x,y);
+      var position=new AMap.LngLat(Number(x),Number(y));
       var offset=new AMap.Pixel(0,0);
       var mark = new AMap.Marker({map:map, position:position, offset:offset});
       mark.setContent(div);
       return mark;
     }
 
-    var map = new AMap.Map('container', {
-        resizeEnable: false,
-        zoom:12,
-        zoomEnable:false,
-        center: [116.397428, 39.90923]
-
-    });
-
-    var step=2;
     function movestep(mark, xtarget, ytarget, xx, yy){
       if (Math.abs(xtarget)>Math.abs(xx))
         if (xtarget <0)
@@ -86,7 +77,7 @@
         otherpos = othermark.getPosition();
         xdist = otherpos.getLng()-thispos.getLng();
         ydist = otherpos.getLat()-thispos.getLat();
-        adjust = 0.001;
+        adjust = 0.005;
         extend = 0.2;
         function dist_offset(dist){
           var offset;
@@ -113,15 +104,32 @@
           othermark.setOffset(new AMap.Pixel(0, 0));
       }
     }
+    var map = new AMap.Map('container', {
+        resizeEnable: false,
+        zoom:16,
+        zoomEnable:false,
+        center: [116.30946636, 39.99558313]
 
-    pictures=[];
-    pictures.push(["me.jpg", 116.4, 39.9]);
-    pictures.push(["me2.jpg", 116.41, 39.91]);
-    pictures.push(["me3.jpg", 116.42, 39.92]);
+    });
 
-    var marks = new Object();
+    var step=2;
+
+    var marks=new Object();
+    $.get('/api/img/list_around_images', {
+      longitude:116.30946636,
+      latitude:39.99558313
+    }, working);
+
+  function working(data, status){
+    var pictures=[];
+    var i;
+    var result=data.data;
+    for (i=0; i<result.length; i++){
+      pictures.push(['/download/'+result[i].path, result[i].longitude, result[i].latitude]);
+    }
+
     var thismark, div, img, id;
-    for (var i=0; i<pictures.length; i++){
+    for (i=0; i<pictures.length; i++){
       thismark = picmark(map, pictures[i][0], pictures[i][1], pictures[i][2]);
       thismark.show();
       div = thismark.getContent();
@@ -131,6 +139,7 @@
       div.onmouseover=overshow;
       div.onmouseout=outshow;
     }
+  }
 
 </script>
 </body>

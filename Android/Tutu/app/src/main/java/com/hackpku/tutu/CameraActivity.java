@@ -22,6 +22,11 @@ import android.widget.Toast;
 
 import com.hackpku.tutu.mylib.NetWorkMethods;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class CameraActivity extends Activity {
 
     ImageView photoIv;
@@ -43,6 +48,9 @@ public class CameraActivity extends Activity {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String filename = getApplicationContext().getFilesDir().getAbsolutePath()+(int)(Math.random()*10000);
+                System.out.println("Filename:"+filename);
+                saveBitmap(photo, filename);
                 NetWorkMethods.uploadPicture(photo,longitude,latitude);
                 finish();
             }
@@ -50,6 +58,27 @@ public class CameraActivity extends Activity {
         locationTv = (TextView) findViewById(R.id.locationTv);
 
         dispatchTakePictureIntent();
+    }
+
+    public void saveBitmap(Bitmap bm, String picName) {
+        File f = new File(picName);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+            System.out.println("storage:"+"已经保存");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     private void getLocation() {

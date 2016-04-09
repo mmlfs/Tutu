@@ -95,8 +95,11 @@ class Test(APIView):
 
 class UploadFiles(APIView):
 	def post(self, request, format=None):
-		ret="0"  
-		file = request.FILES.get("Filedata",None)  
+		ret="0"
+		print request.POST  
+		file = request.FILES.get("Filedata",None) 
+		print file
+		new_name=""
 		if file:  
 			result,new_name=profile_upload(file)  
 			if result:  
@@ -105,6 +108,14 @@ class UploadFiles(APIView):
 				ret="1"                      
 		return Response({"status":ret, "info":"", "data":new_name})
 
+class DeleteImage(APIView):
+	def get(self, request, format=None):
+		path = request.query_params["path"]
+		images = Image.objects.filter(path=path)
+		for img in images:
+			print img.path
+			img.delete()
+		return Response({"status":0, "info":""})
 
 class UploadImage(APIView):
 	def get(self, request, format=None):
