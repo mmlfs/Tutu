@@ -9,6 +9,7 @@ urlpatterns = [
     url(r"^test/$", views.Test.as_view(), name="test"),
     url(r"^upload/$", views.UploadImage.as_view(), name="upload_image"),
     url(r"^list_images/$", views.GetImageList.as_view(), name="get_imageslist"),
+    url(r"^list_around_images/$", views.GetAroundImageList.as_view(), name="list_around_images"),
     url(r"^(?P<pk>\d+)/add_comment/$", views.AddComment.as_view(), name="add_comment"),
     url(r"^(?P<pk>\d+)/list_comment/$", views.GetCommentPerImg.as_view(), name="list_comments"),
 
