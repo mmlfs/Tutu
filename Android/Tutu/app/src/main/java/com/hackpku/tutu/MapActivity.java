@@ -59,6 +59,7 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
 
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.99576396+(Math.random()-0.5)*0.01, 116.30360842+(Math.random()-0.5)*0.01), 16));
         vt = new Vector<>();
+        posSet = new HashSet<>();
         addTuphoto();
         addMapMarker();
 
@@ -99,9 +100,18 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         Toast toast= Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
         toast.show();
     }
+    void deleteTuphoto(LatLngBounds llb){
+        Vector<Tuphoto> tv2 = new Vector<>();
+        for(Tuphoto p:vt){
+            if(llb.contains(new LatLng(p.wei, p.jing)))
+                tv2.add(p);
+        }
+        vt = tv2;
+    }
     void addMapMarker(){
         aMap.clear();
         LatLngBounds llb = aMap.getProjection().getVisibleRegion().latLngBounds;
+        if(vt.size()>30) deleteTuphoto(llb);
         for(Tuphoto p: vt){
             if(llb.contains(new LatLng(p.wei, p.jing)))
                 aMap.addMarker(p.getMarker());
