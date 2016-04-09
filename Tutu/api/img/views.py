@@ -184,7 +184,7 @@ class GetAroundImageList(APIView):
 		longitude = (float)(request.query_params["longitude"])
 		latitude = (float)(request.query_params["latitude"])
 
-		img_list = Image.objects.filter(longitude__gte=longitude-0.003,longitude__lte=longitude+0.003,latitude__gte=latitude-0.003,latitude__lte=latitude+0.003)
+		img_list = Image.objects.filter(longitude__gte=longitude-1,longitude__lte=longitude+1,latitude__gte=latitude-1,latitude__lte=latitude+1)
 		serializer = ImageSerializer(img_list,many=True)
 
 		analyzer = {}
