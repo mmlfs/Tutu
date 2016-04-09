@@ -34,7 +34,8 @@
         <activity
             android:name=".MapActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".PhotoWallActivity" />
+        <activity android:name=".ScrollPhotoActivity" />
+        <activity android:name=".CommentActivity" />
         <activity android:name=".CameraActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity android:name=".TestActivity"></activity>

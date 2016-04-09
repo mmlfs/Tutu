@@ -4,27 +4,21 @@ package com.hackpku.tutu.mylib;
  * Created by duyanpku on 16/4/9.
  */
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Bundle;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.hackpku.tutu.PhotoWallActivity;
 import com.hackpku.tutu.R;
@@ -69,8 +63,11 @@ public class PhotoWallAdapter extends ArrayAdapter<String> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast toast=Toast.makeText(getContext(), "你好啊", Toast.LENGTH_SHORT);
-                toast.show();
+                Bundle data = new Bundle();
+                data.putString("url", imageURL);
+                //Intent intent = new Intent(getContext(), ScrollPhoto.class);
+                //intent.putExtras(data);
+                //getContext().startActivity(intent);
             }
         });
         return view;

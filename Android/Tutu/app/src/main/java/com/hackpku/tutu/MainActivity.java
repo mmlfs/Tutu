@@ -33,7 +33,7 @@ public class MainActivity extends Activity implements OnClickListener{
         }
         else if(v.equals(photoBtn)) {
             Log.e("pp", "end");
-            Intent intent = new Intent(this, PhotoWallActivity.class);
+            Intent intent = new Intent(this, ScrollPhotoActivity.class);
             startActivity(intent);
         }
     }
