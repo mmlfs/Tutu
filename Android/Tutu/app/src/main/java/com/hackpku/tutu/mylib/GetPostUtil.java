@@ -7,8 +7,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -121,6 +124,72 @@ public class GetPostUtil {
             e.printStackTrace();
         }
 
+        return ans;
+    }
+
+    public static JSONObject uploadPicture(Bitmap bitmap)
+    {
+        String result = null;
+        OutputStream out = null;
+        InputStream in = null;
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        // CompressFormat set up to JPG, you can change to PNG or whatever you want;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] data = bos.toByteArray();
+
+        try {
+            URL url = new URL("http://121.201.58.48/api/img/upload_file/");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            //上传图片的一些参数设置
+            conn.setRequestProperty("Accept", "image/gif,   image/x-xbitmap,   image/jpeg,   image/pjpeg,   application/vnd.ms-excel,   application/vnd.ms-powerpoint,   application/msword,   application/x-shockwave-flash,   application/x-quickviewplus,   */*");
+            conn.setRequestProperty("Accept-Language", "zh-cn");
+            conn.setRequestProperty("Content-type", "multipart/form-data;   boundary=---------------------------7d318fd100112");
+            conn.setRequestProperty("Accept-Encoding", "gzip,   deflate");
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0   (compatible;   MSIE   6.0;   Windows   NT   5.1)");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(true);
+            out = conn.getOutputStream();
+
+            //写入图片流
+            out.write(data);
+            out.flush();
+
+            //读取响应数据
+            int code = conn.getResponseCode();
+            String line;
+            in = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            result = reader.readLine();
+            while ((line = reader.readLine()) != null)
+                result += "\n" + line;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (out != null) {
+                out.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        JSONObject ans = null;
+        try {
+            ans = new JSONObject(result);
+        }
+        catch (Exception e) {
+            System.out.println("JSON转化错误!");
+            e.printStackTrace();
+        }
         return ans;
     }
 }
