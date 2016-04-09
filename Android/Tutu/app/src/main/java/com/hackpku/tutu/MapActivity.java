@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMap.OnCameraChangeListener;
@@ -16,18 +17,19 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
-import com.amap.api.maps2d.model.Marker;
+import com.hackpku.tutu.mylib.NetWorkMethods;
 import com.hackpku.tutu.mylib.Tuphoto;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Vector;
 
 public class MapActivity extends Activity implements OnCameraChangeListener,OnMapLongClickListener{
 
     private MapView mapView;
     private AMap aMap;
-    private LinkedList<Marker> llm;
     private Vector<Tuphoto> vt;
+    private HashSet<Double> posSet;
     private int[] photos = new int[10];
 
 
@@ -56,11 +58,9 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         init();
 
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.99576396+(Math.random()-0.5)*0.01, 116.30360842+(Math.random()-0.5)*0.01), 16));
-        llm = new LinkedList<Marker>();
-        vt = getPosPhoto(aMap.getCameraPosition().target);
-        for(Tuphoto p: vt) {
-            aMap.addMarker(p.getMarker());
-        }
+        vt = new Vector<>();
+        addTuphoto();
+        addMapMarker();
 
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMapLongClickListener(this);
@@ -73,24 +73,39 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
 
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
+        addTuphoto();
+        addMapMarker();
+    }
+    void addTuphoto(){
+        String info="try:";
         LatLngBounds llb = aMap.getProjection().getVisibleRegion().latLngBounds;
         double la1 = llb.northeast.latitude, la2 = llb.southwest.latitude;
         double lo1 = llb.northeast.longitude, lo2 = llb.southwest.longitude;
-        Tuphoto p;
-
-        for(int i=0; i<vt.size(); i++){
-            if(!llb.contains( new LatLng(vt.get(i).wei, vt.get(i).jing))){
-                vt.set(i, new Tuphoto(la1+(la2-la1)*Math.random(),lo1+(lo2-lo1)*Math.random(),
-                        BitmapDescriptorFactory.fromResource(photos[(int)(Math.random()*10)])));
+        double lan, lon;
+        ArrayList<Tuphoto> alt;
+        for(int i=0; i<5 ; i++){
+            lan = la1+(la2-la1)*Math.random();
+            lon = lo1+(lo2-lo1)*Math.random();
+            info+=""+lan+"-"+lon+"\n";
+            alt = NetWorkMethods.getBitmaps(lan, lon);
+            for(Tuphoto p:alt){
+                if(!posSet.contains(p.wei*p.jing)){
+                    vt.add(p);
+                    posSet.add(p.wei*p.jing);
+                }
             }
         }
+        info+="photo size:"+vt.size();
+        Toast toast= Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+    void addMapMarker(){
         aMap.clear();
-        for(Tuphoto tp:vt) aMap.addMarker(tp.getMarker());
-
-        String info = "na:"+la1+"-"+lo1+"\nsw:"+la2+"-"+lo2+"\nphoto num:"+vt.size();
-        //Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
-        //toast.show();
-
+        LatLngBounds llb = aMap.getProjection().getVisibleRegion().latLngBounds;
+        for(Tuphoto p: vt){
+            if(llb.contains(new LatLng(p.wei, p.jing)))
+                aMap.addMarker(p.getMarker());
+        }
     }
 
     Vector<Tuphoto> getPosPhoto(LatLng lng){
