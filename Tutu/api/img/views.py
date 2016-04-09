@@ -95,8 +95,10 @@ class Test(APIView):
 
 class UploadFiles(APIView):
 	def post(self, request, format=None):
-		ret="0"  
+		ret="0"
+		print request  
 		file = request.FILES.get("Filedata",None) 
+		print file
 		new_name=""
 		if file:  
 			result,new_name=profile_upload(file)  
