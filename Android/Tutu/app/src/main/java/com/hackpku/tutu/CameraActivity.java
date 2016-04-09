@@ -51,7 +51,7 @@ public class CameraActivity extends Activity {
                 String filename = getApplicationContext().getFilesDir().getAbsolutePath()+(int)(Math.random()*10000);
                 System.out.println("Filename:"+filename);
                 saveBitmap(photo, filename);
-                NetWorkMethods.uploadPicture(photo,longitude,latitude);
+                NetWorkMethods.uploadPicture(filename,longitude,latitude);
                 finish();
             }
         });

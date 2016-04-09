@@ -28,6 +28,7 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
     private MapView mapView;
     private AMap aMap;
     private LinkedList<Marker> llm;
+    private Vector<Tuphoto> vt;
     private int[] photos = new int[10];
 
 
@@ -57,9 +58,9 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
 
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.99576396+(Math.random()-0.5)*0.01, 116.30360842+(Math.random()-0.5)*0.01), 16));
         llm = new LinkedList<Marker>();
-        Vector<Tuphoto> vt = getPosPhoto(aMap.getCameraPosition().target);
+        vt = getPosPhoto(aMap.getCameraPosition().target);
         for(Tuphoto p: vt) {
-            llm.add(aMap.addMarker(p.getMarker()));
+            aMap.addMarker(p.getMarker());
         }
 
         aMap.setOnCameraChangeListener(this);
@@ -78,15 +79,14 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         double lo1 = llb.northeast.longitude, lo2 = llb.southwest.longitude;
         Tuphoto p;
 
-        for(Marker m: llm){
-            if(!llb.contains( m.getPosition() ) ){
-                m.remove();
-                p = new Tuphoto(la1+(la2-la1)*Math.random(),lo1+(lo2-lo1)*Math.random(),
+        for(Tuphoto tp: vt){
+            if(!llb.contains( new LatLng(tp.wei, tp.jing) ) ){
+                tp = new Tuphoto(la1+(la2-la1)*Math.random(),lo1+(lo2-lo1)*Math.random(),
                         BitmapDescriptorFactory.fromResource(photos[(int)(Math.random()*10)]));
-                m = aMap.addMarker(p.getMarker());
             }
         }
-        aMap.invalidate();
+        aMap.clear();
+        for(Tuphoto tp:vt) aMap.addMarker(tp.getMarker());
 
         String info = "na:"+la1+"-"+lo1+"\nsw:"+la2+"-"+lo2+"\nphoto num:"+llm.size();
         Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
