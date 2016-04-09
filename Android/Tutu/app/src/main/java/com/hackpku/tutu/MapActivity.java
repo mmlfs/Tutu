@@ -87,7 +87,7 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
             lan = la1+(la2-la1)*Math.random();
             lon = lo1+(lo2-lo1)*Math.random();
             info+=""+lan+"-"+lon+"\n";
-            alt = NetWorkMethods.getBitmaps(lan, lon);
+            alt = NetWorkMethods.getBitmaps(lon, lan);
             for(Tuphoto p:alt){
                 if(!posSet.contains(p.wei*p.jing)){
                     vt.add(p);
