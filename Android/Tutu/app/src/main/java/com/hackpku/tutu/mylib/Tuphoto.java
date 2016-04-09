@@ -21,16 +21,21 @@ public class Tuphoto {
     public Tuphoto(double w, double j, BitmapDescriptor photo){
         this(w, j, photo, "");
     }
-    public Tuphoto(double w, double j, BitmapDescriptor photo, String c){
+    public Tuphoto(double w, double j, Bitmap bmap){
+        this(w, j, bmap, "");
+    }
+    public Tuphoto(double w, double j, Bitmap bmap, String c){
         wei = w;
         jing = j;
-        Bitmap bm = photo.getBitmap();
-        zoom = 300f/bm.getWidth();
-        bm = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*zoom), (int)(bm.getHeight()*zoom), true);
+        zoom = 300f/bmap.getWidth();
+        Bitmap bm = Bitmap.createScaledBitmap(bmap, (int)(bmap.getWidth()*zoom),(int)(bmap.getHeight()*zoom), true);
         bitmap = BitmapDescriptorFactory.fromBitmap(bm);
         comment = c;
         width = bitmap.getWidth();
         height = bitmap.getHeight();
+    }
+    public Tuphoto(double w, double j, BitmapDescriptor photo, String c){
+        this(w, j, photo.getBitmap(), c);
     }
     public MarkerOptions getMarker(){
         return new MarkerOptions().anchor(0.5f, 0.5f).icon(bitmap).position(new LatLng(wei, jing));
