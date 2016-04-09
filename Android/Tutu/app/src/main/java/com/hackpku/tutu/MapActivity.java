@@ -79,16 +79,16 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         double lo1 = llb.northeast.longitude, lo2 = llb.southwest.longitude;
         Tuphoto p;
 
-        for(Tuphoto tp: vt){
-            if(!llb.contains( new LatLng(tp.wei, tp.jing) ) ){
-                tp = new Tuphoto(la1+(la2-la1)*Math.random(),lo1+(lo2-lo1)*Math.random(),
-                        BitmapDescriptorFactory.fromResource(photos[(int)(Math.random()*10)]));
+        for(int i=0; i<vt.size(); i++){
+            if(!llb.contains( new LatLng(vt.get(i).wei, vt.get(i).jing))){
+                vt.set(i, new Tuphoto(la1+(la2-la1)*Math.random(),lo1+(lo2-lo1)*Math.random(),
+                        BitmapDescriptorFactory.fromResource(photos[(int)(Math.random()*10)])));
             }
         }
         aMap.clear();
         for(Tuphoto tp:vt) aMap.addMarker(tp.getMarker());
 
-        String info = "na:"+la1+"-"+lo1+"\nsw:"+la2+"-"+lo2+"\nphoto num:"+llm.size();
+        String info = "na:"+la1+"-"+lo1+"\nsw:"+la2+"-"+lo2+"\nphoto num:"+vt.size();
         Toast toast=Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
         toast.show();
 

@@ -48,7 +48,7 @@ public class CameraActivity extends Activity {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String filename = getApplicationContext().getFilesDir().getAbsolutePath()+(int)(Math.random()*10000);
+                String filename = getApplicationContext().getFilesDir().getAbsolutePath()+(int)(Math.random()*10000)+".png";
                 System.out.println("Filename:"+filename);
                 saveBitmap(photo, filename);
                 NetWorkMethods.uploadPicture(filename,longitude,latitude);
