@@ -59,8 +59,10 @@ public class NetWorkMethods {
             String comment = null;
             for (int i = 0; i < jsonArray.length(); ++i) {
                 jsonObject = (JSONObject) jsonArray.get(i);
-                child = (JSONObject) ((jsonObject.getJSONArray("related_img").get(0)));
-                comment = child.getString("content");
+                if (jsonObject.getJSONArray("related_img").length() > 0) {
+                    child = (JSONObject) ((jsonObject.getJSONArray("related_img").get(0)));
+                    comment = child.getString("content");
+                }
                 imageUrl = jsonObject.getString("path");
                 if(!imageUrl.startsWith("http"))
                     imageUrl = "http://121.201.58.48/download/" + imageUrl;
