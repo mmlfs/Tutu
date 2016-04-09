@@ -115,6 +115,7 @@ class DeleteImage(APIView):
 		for img in images:
 			print img.path
 			img.delete()
+		return Response({"status":0, "info":""})
 
 class UploadImage(APIView):
 	def get(self, request, format=None):
