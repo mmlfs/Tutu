@@ -95,7 +95,7 @@ public class HorizontalScrollViewAdapter
 	 */
 	public static void setImageView(String imageUrl, ImageView imageView) {
 		Bitmap bitmap = getBitmapFromMemoryCache(imageUrl);
-		Log.i("Position", imageUrl);
+
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
 		} else {
