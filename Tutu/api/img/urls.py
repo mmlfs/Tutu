@@ -6,6 +6,7 @@ urlpatterns = [
     # Examples:
     # url(r'^$', 'TripFM.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r"^test/$", views.Test.as_view(), name="test"),
     url(r"^upload/$", views.UploadImage.as_view(), name="upload_image"),
     url(r"^list_images/$", views.GetImageList.as_view(), name="get_imageslist"),
     url(r"^(?P<pk>\d+)/add_comment/$", views.AddComment.as_view(), name="add_comment"),

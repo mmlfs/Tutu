@@ -12,7 +12,7 @@ class ImageSerializer(serializers.ModelSerializer):
     # comments_count = serializers.IntegerField(source='comments.count')
     class Meta:
         model = Image
-        fields = ('id', 'creator', 'latitude', 'longitude', 'created', 'likes_count', 'path')
+        fields = ('id', 'creator', 'latitude', 'longitude', 'created', 'likes_count', 'path', 'male', 'age', 'attractive', 'female')
 
 class CommentSerializer(serializers.ModelSerializer):
     # user = UserBriefSerializer()
