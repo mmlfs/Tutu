@@ -3,6 +3,7 @@ package com.hackpku.tutu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,6 +37,18 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
 
         photos[0] = R.mipmap.a;photos[1]=R.mipmap.b;photos[2]=R.mipmap.c;
         photos[3] = R.mipmap.d;photos[4]=R.mipmap.e;photos[5]=R.mipmap.f;
