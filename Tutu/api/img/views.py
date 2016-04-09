@@ -1,11 +1,13 @@
 #coding=utf-8
-
+import os
+import uuid
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
 
+from Tutu import settings
 from django.contrib import auth
 from django.contrib.auth.models import User
 from Tutu.api.img.models import Image,Comment
@@ -18,6 +20,22 @@ import httplib
 import json
 from urllib import quote
 from urllib import urlencode
+
+
+
+def profile_upload(file):  
+    if file:  
+        path=os.path.join(settings.MEDIA_ROOT,'upload')  
+        #file_name=str(uuid.uuid1())+".jpg"  
+        file_name=str(uuid.uuid1())+'-'+file.name  
+        #fname = os.path.join(settings.MEDIA_ROOT,filename)  
+        path_file=os.path.join(path,file_name)  
+        fp = open(path_file, 'wb')  
+        for content in file.chunks():   
+            fp.write(content)  
+        fp.close()  
+        return (True,file_name) #change  
+    return (False,file_name)   #change  
 
 
 def getKeyWords(command):
@@ -73,6 +91,19 @@ class Test(APIView):
 
 		s=getFaceInfo('http://file2.mafengwo.net/M00/31/0C/wKgBm04YiW7Cz2yfAAEx87h-R4U84.jpeg')
 		return Response({"status":0, "info":"", "data":s})
+
+
+class UploadFiles(APIView):
+	def post(self, request, format=None):
+		ret="0"  
+		file = request.FILES.get("Filedata",None)  
+		if file:  
+			result,new_name=profile_upload(file)  
+			if result:  
+				ret="0"  
+			else:  
+				ret="1"                      
+		return Response({"status":ret, "info":"", "data":new_name})
 
 
 class UploadImage(APIView):
@@ -142,7 +173,41 @@ class GetAroundImageList(APIView):
 
 		img_list = Image.objects.filter(longitude__gte=longitude-0.003,longitude__lte=longitude+0.003,latitude__gte=latitude-0.003,latitude__lte=latitude+0.003)
 		serializer = ImageSerializer(img_list,many=True)
-		return Response({"status":0, "info":"", "data":serializer.data})
+
+		analyzer = {}
+		age=0
+		male=0
+		female=0
+		attractive=0
+		for img in img_list:
+			if img.age==-1:
+				continue
+			age+=img.age
+			attractive+=img.attractive
+			male+=img.male
+			female+=img.female
+		if len(img_list)>0:
+			age=float(age)/len(img_list)
+			age=float(attractive)/len(img_list)
+
+		comment_list = Comment.objects.filter(img__in=img_list)
+		attitude=0
+		words=""
+		for comment in comment_list:
+			attitude+=comment.attitude
+			words+=comment.content
+		if len(comment_list)>0:
+			attitude=float(attitude)/len(comment_list)
+			words=getKeyWords(words)
+
+		analyzer['age']=age
+		analyzer['attractive']=attractive
+		analyzer['male']=male
+		analyzer['female']=female
+		analyzer['attitude']=(attitude+1)*5
+		analyzer['tag']=words
+
+		return Response({"status":0, "info":"", "total":analyzer, "data":serializer.data})
 
 
 
