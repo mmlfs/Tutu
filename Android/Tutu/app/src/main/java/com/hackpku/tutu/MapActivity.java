@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.AMap.OnCameraChangeListener;
@@ -84,7 +83,7 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
         double lo1 = llb.northeast.longitude, lo2 = llb.southwest.longitude;
         double lan, lon;
         ArrayList<Tuphoto> alt;
-        for(int i=0; i<5 ; i++){
+        for(int i=0; i<2&&vt.size()<10 ; i++){
             lan = la1+(la2-la1)*Math.random();
             lon = lo1+(lo2-lo1)*Math.random();
             info+=""+lan+"-"+lon+"\n";
@@ -97,21 +96,25 @@ public class MapActivity extends Activity implements OnCameraChangeListener,OnMa
             }
         }
         info+="photo size:"+vt.size();
-        Toast toast= Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
-        toast.show();
+        //Toast toast= Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT);
+        //toast.show();
     }
     void deleteTuphoto(LatLngBounds llb){
         Vector<Tuphoto> tv2 = new Vector<>();
+        HashSet<Double> hsd = new HashSet<>();
         for(Tuphoto p:vt){
-            if(llb.contains(new LatLng(p.wei, p.jing)))
+            if(llb.contains(new LatLng(p.wei, p.jing))) {
                 tv2.add(p);
+                hsd.add(p.wei*p.jing);
+            }
         }
         vt = tv2;
+        posSet = hsd;
     }
     void addMapMarker(){
         aMap.clear();
         LatLngBounds llb = aMap.getProjection().getVisibleRegion().latLngBounds;
-        if(vt.size()>30) deleteTuphoto(llb);
+        if(vt.size()>8) deleteTuphoto(llb);
         for(Tuphoto p: vt){
             if(llb.contains(new LatLng(p.wei, p.jing)))
                 aMap.addMarker(p.getMarker());
