@@ -9,12 +9,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hackpku.tutu.MainActivity">
 
-    <TextView
+    <TextView android:id="@+id/helloworld"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!" />
     <Button android:id="@+id/entryMapBtn"
         android:layout_width="match_parent"
         android:layout_height="20dp"
+        android:layout_below="@id/helloworld"
         android:text="进入地图"/>
 </RelativeLayout>
