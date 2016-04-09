@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,7 @@ public class PhotoWallAdapter extends ArrayAdapter<String> implements OnScrollLi
         }
         final ImageView photo = (ImageView) view.findViewById(R.id.photo);
         // 给ImageView设置一个Tag，保证异步加载图片时不会乱序
+        Log.i("photo", url);
         photo.setTag(url);
         setImageView(url, photo);
         return view;
