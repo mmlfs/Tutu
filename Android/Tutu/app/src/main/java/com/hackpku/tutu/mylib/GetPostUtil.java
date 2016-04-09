@@ -131,6 +131,7 @@ public class GetPostUtil {
         bmpCompressed.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] data = bos.toByteArray();
         JSONObject ans = null;
+        HttpPost post = null;
         return ans;
     }
 }
