@@ -167,7 +167,7 @@ class UploadImage(APIView):
 		img.attractive=attractive
 		img.save()
 		serializer = ImageSerializer(img)
-		return Response({"status":0, "info":serializer.data, "data":face_info['faces']})
+		return Response({"status":0, "info":serializer.data['id'], "data":face_info['faces']})
 		# return Response({"status":0, "info":""})
 
 
