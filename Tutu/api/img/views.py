@@ -113,6 +113,7 @@ class DeleteImage(APIView):
 		path = request.query_params["path"]
 		images = Image.objects.filter(path=path)
 		for img in images:
+			print img.path
 			img.delete()
 
 class UploadImage(APIView):
