@@ -6,8 +6,10 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hackpku.tutu.CommentActivity;
 import com.hackpku.tutu.R;
 import com.hackpku.tutu.ScrollPhotoActivity;
 

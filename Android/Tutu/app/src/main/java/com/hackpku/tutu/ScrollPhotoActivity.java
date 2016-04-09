@@ -6,6 +6,8 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -60,6 +62,16 @@ public class ScrollPhotoActivity extends Activity {
         };
 
         mImg = (ImageView) findViewById(R.id.id_content);
+        mImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle data = new Bundle();
+                data.putString("url", (String) view.getTag());
+                Intent intent = new Intent(ScrollPhotoActivity.this, CommentActivity.class);
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
 
         mHorizontalScrollView = (MyHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
         mAdapter = new HorizontalScrollViewAdapter(this, mDatas);
@@ -72,6 +84,7 @@ public class ScrollPhotoActivity extends Activity {
                                                     View viewIndicator)
                     {
                         HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
+                        mImg.setTag(mDatas.get(position));
                         viewIndicator.setBackgroundColor(Color
                                 .parseColor("#AA024DA4"));
                     }
@@ -84,6 +97,7 @@ public class ScrollPhotoActivity extends Activity {
             public void onClick(View view, int position)
             {
                 HorizontalScrollViewAdapter.setImageView(mDatas.get(position), mImg);
+                mImg.setTag(mDatas.get(position));
                 view.setBackgroundColor(Color.parseColor("#AA024DA4"));
             }
         });
