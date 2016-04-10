@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>基本地图展示</title>
+    <title>Tutu</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
     <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
@@ -25,7 +25,7 @@
     function picdiv(picname){
       var div;
       div=document.createElement("div");
-      div.innerHTML='<img src="'+picname+'" alt="pic" class="img-thumbnail" id="'+picname+'">';
+      div.innerHTML='<img src="'+picname+'" alt="pic" class="img-thumbnail" id="'+picname+'"></br>'+'<button type="button" class="btn btn-default btn-xs">Follow</button>';
       return div;
     }
 
@@ -77,6 +77,8 @@
         otherpos = othermark.getPosition();
         xdist = otherpos.getLng()-thispos.getLng();
         ydist = otherpos.getLat()-thispos.getLat();
+        if (xdist*xdist+ydist*ydist>0.000005)
+          continue;
         adjust = 0.005;
         extend = 0.2;
         function dist_offset(dist){
@@ -116,8 +118,10 @@
 
     var marks=new Object();
     $.get('/api/img/list_around_images', {
-      longitude:116.30946636,
-      latitude:39.99558313
+//      longitude:116.30946636,
+//      latitude:39.99558313
+      longitude:116.30442381,
+      latitude:39.99453106
     }, working);
 
   function working(data, status){
@@ -125,6 +129,7 @@
     var i;
     var result=data.data;
     for (i=0; i<result.length; i++){
+      console.log(result[i].path, result[i].longitude, result[i].latitude);
       pictures.push(['/download/'+result[i].path, result[i].longitude, result[i].latitude]);
     }
 
